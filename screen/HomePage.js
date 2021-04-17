@@ -6,7 +6,7 @@ import * as friendsActions from '../store/actions/friends';
 import Colors from '../constants/Colors';
 import ListItemName from '../components/UI/ListItemName';
 import SearchableDropdown from 'react-native-searchable-dropdown';
-
+import { firebase } from '../constants/Config';
 
 
 //const myDB = firebase.firestore();
@@ -23,6 +23,13 @@ const HomePageScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   
+
+  const [myDB, setMyDB] = useState();
+
+
+  useEffect( () => {
+    setMyDB(firebase.firestore());
+  }, [setMyDB, myDB]);
   
   const dispatch = useDispatch();
 
@@ -75,7 +82,27 @@ const HomePageScreen = props => {
   //   }
   // , []);
 
-  const onSearchBarChangeTextHandler = (text) => {
+  const onSearchBarChangeTextHandler = async(text) => {
+    //search the user
+    await myDB
+      .collection("users")
+      .where("email","==", text)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          console.log(doc.id, " => ", doc.data());
+          const myObj = {};
+          myObj['name'] = doc.data()['fullname'];
+          myObj['id'] = doc.data()['id'];
+          searchBarItems.push(myObj);
+        });
+
+        // dispatch({ type: SET_FRIENDS, friendsList: myArr });
+
+      }).catch(error => {
+        console.log("Error getting document: ", error);
+      });
+
     console.log(text);
   }
 

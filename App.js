@@ -9,7 +9,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import authReducer from './store/reducers/auth';  ////////////////////////
 import friendReducer from './store/reducers/friends';
-
+import { LogBox } from 'react-native';
+///////////---------------
+LogBox.ignoreLogs(['Setting a timer'])
+LogBox.ignoreLogs(['VirtualizedLists'])
 
 //combine the reducers
 const rootReducer = combineReducers({
