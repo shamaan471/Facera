@@ -4,7 +4,9 @@ import { SearchBar, ListItem } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import * as friendsActions from '../store/actions/friends';
 import Colors from '../constants/Colors';
-import ListItemName from '../components/UI/ListItemName'
+import ListItemName from '../components/UI/ListItemName';
+import SearchableDropdown from 'react-native-searchable-dropdown';
+
 
 
 //const myDB = firebase.firestore();
@@ -13,22 +15,8 @@ import ListItemName from '../components/UI/ListItemName'
 
 const HomePageScreen = props => {
 
-
-
-  const [search , setSearch] = useState('');
-  // const [userList, setUserList] = useState([
-  //   {
-  //     name: 'Amy Farha',
-  //     avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-  //     subtitle: 'Vice President'
-  //   },
-  //   {
-  //     name: 'Chris Jackson',
-  //     avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-  //     subtitle: 'Vice Chairman'
-  //   },
-  //  // more items
-  // ]);
+  const [searchText , setSearchText] = useState('');
+  const [searchBarItems, setSearchBarItems] = useState([]);
 
   const friendsList = useSelector(state => state.friend.friendsList);
   const user = useSelector(state => state.auth.userId);
@@ -37,7 +25,6 @@ const HomePageScreen = props => {
   
   
   const dispatch = useDispatch();
-
 
 
   const searchHandler = text => {
@@ -60,17 +47,6 @@ const HomePageScreen = props => {
   },
   [dispatch, setIsLoading]);
 
- 
-  // const chatID = () => {
-  //   const chatterID = this.props.authUser.uid;
-  //   const chateeID = this.chateeUID;
-  //   const chatIDpre = [];
-  //   chatIDpre.push(chatterID);
-  //   chatIDpre.push(chateeID);
-  //   chatIDpre.sort();
-  //   return chatIDpre.join('_');
-  // };
-
 
   const selectPersonHandler = (userId, friendId) => {
 
@@ -91,6 +67,25 @@ const HomePageScreen = props => {
   };
 
 
+  // //to run when the user inputs a name to the search bar
+  // const onSearchBarChangeTextHandler = useCallback(
+  //   (text) => async() => {
+  //     //go to db and fetch emails and ids
+  //     console.log(text);
+  //   }
+  // , []);
+
+  const onSearchBarChangeTextHandler = (text) => {
+    console.log(text);
+  }
+
+  const onSearchBarItemSelect = useCallback(
+    (item) => async() => {
+      //add the selected user as frind
+    }
+  , [searchBarItems]);
+
+
   //runs on every rerender and calls func to fetch the friends
   useEffect(() => {
     setIsLoading(true);
@@ -106,44 +101,30 @@ const HomePageScreen = props => {
       </View>
     )
   }
-
-
-  //present the users in tile
-  const Item = ({ title }) => (
-    <TouchableOpacity style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </TouchableOpacity>
-  );
-
-  const renderItem = ({ item }) => (
-    <Item title={item.name} />
-  );
-
   return (
     <View style={styles.screen}>
-      <SearchBar
-        placeholder="Type Here..."
-        onChangeText={searchHandler}
-        value={search}
-      />
+      <SearchableDropdown
+        onTextChange={(text) => {onSearchBarChangeTextHandler(text)}}
+        onItemSelect={(item) => {onSearchBarItemSelect(item)}}
+        //onItemSelect={(item) => alert(JSON.stringify(item))}
+        containerStyle= {styles.textContainer}
+        textInputStyle={styles.textInput}
+        itemStyle={styles.searchBarItemStyle}
+        itemTextStyle={styles.searchBarItemText}
+        itemsContainerStyle={styles.searchBarItemContainer}
+        items={searchBarItems}
+        defaultIndex={2}
+        placeholder="please type email of the user"
+        resetValue={false}
+        //reset textInput Value with true and false state
+        underlineColorAndroid="transparent"
+        //To remove the underline from the android input
+      /> 
+
+
+
       <ScrollView>
         {
-          // friendsList.map((l, i) => (
-          //   <ListItem key={i} bottomDivider>
-          //     {console.log(l)}
-          //     {console.log(typeof l.name)}
-          //     <ListItem.Content>
-          //       <ListItem.Title>{l.name}</ListItem.Title>  
-          //     </ListItem.Content>
-          //     onPress = {onPressUserHandler}
-
-
-
-
-
-
-          //   </ListItem>
-          // ))
 
         <FlatList
           data={friendsList}
@@ -153,19 +134,12 @@ const HomePageScreen = props => {
             <ListItemName style = {styles.item} onSelect = {() => {selectPersonHandler(user, itemData.item.id)}}>
               <Text style = {styles.title}>{itemData.item.name}</Text>
             </ListItemName>
-          )
-            
-          }
-
-        />
-         
-          
+          )}
+        /> 
         }
       </ScrollView>
     </View>
-    
   );
-
 };
 
 
@@ -185,6 +159,32 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  textContainer: {
+    padding: 5
+  },
+
+  textInput: {
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#FAF7F6',
+  },
+
+  searchBarItemStyle: {
+    padding: 10,
+    marginTop: 2,
+    backgroundColor: '#FAF9F8',
+    borderColor: '#bbb',
+    borderWidth: 1,
+  },
+
+  searchBarItemText: {
+    color: '#222',
+  },
+
+  searchBarItemContainer: {
+    maxHeight: '60%',
+  }
 });
 
 export const screenOptions = {
