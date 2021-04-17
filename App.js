@@ -8,11 +8,13 @@ import ReduxThunk from 'redux-thunk';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import authReducer from './store/reducers/auth';  ////////////////////////
+import friendReducer from './store/reducers/friends';
 
 
 //combine the reducers
 const rootReducer = combineReducers({
-  auth: authReducer
+  auth: authReducer,
+  friend: friendReducer
   //other reducers
 
 });

@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen, {screenOptions as loginScreenOptions} from '../screen/LoginScreen';
 import SignupScreen, {screenOptions as signupScreenOptions} from '../screen/SignupScreen';
 import HomePageScreen, {screenOptions as homeScreenOptions} from '../screen/HomePage';
+import ChatScreen, {screenOptions as chatScreenOptions} from '../screen/ChatScreen';
 import {
   createDrawerNavigator,
   DrawerItemList
@@ -28,7 +29,6 @@ const defaultNavOptions = {
 
 //auth navigator
 const AuthStackNavigator = createStackNavigator();
-
 export const AuthNavigator = () => {
   return (
     <AuthStackNavigator.Navigator screenOptions={defaultNavOptions}>
@@ -61,9 +61,20 @@ export const MainPageNavigator = () => {
         component = {HomePageScreen}
         options = {homeScreenOptions}
       />
+
+      <MainNavigator.Screen
+        name = "ChatRoom"
+        component = {ChatScreen}
+        options = {chatScreenOptions}
+      />
+
+
     </MainNavigator.Navigator>
   );
 };
+
+
+
 
 
 
