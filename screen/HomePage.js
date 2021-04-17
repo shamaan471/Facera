@@ -75,18 +75,6 @@ const HomePageScreen = props => {
   };
 
 
-  /////////////////////////////////////////////
-
-  // const loadFriends = useCallback(
-  //   fetchFriends(user)
-  // ,[setIsLoading, fetchFriends]);
-
-  // const fetchFriends = userId => {
-
-  // };
-
-  /////////////////////////////////////////////
-
   //runs on every rerender and calls func to fetch the friends
   useEffect(() => {
     setIsLoading(true);
