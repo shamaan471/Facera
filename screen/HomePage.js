@@ -45,10 +45,6 @@ const HomePageScreen = props => {
   };
 
 
-  const onPressUserHandler = text => {
-
-  };
-
   //function to fetch the friends list from the store
   const loadFriends = useCallback(
     async() => {
@@ -65,12 +61,32 @@ const HomePageScreen = props => {
   [dispatch, setIsLoading]);
 
  
+  // const chatID = () => {
+  //   const chatterID = this.props.authUser.uid;
+  //   const chateeID = this.chateeUID;
+  //   const chatIDpre = [];
+  //   chatIDpre.push(chatterID);
+  //   chatIDpre.push(chateeID);
+  //   chatIDpre.sort();
+  //   return chatIDpre.join('_');
+  // };
 
 
   const selectPersonHandler = (userId, friendId) => {
+
+    //generating distinct chat id for the chat room between these friends
+    const chatterId = userId;
+    const chateeID = friendId;
+    const chatIDpre = [];
+    chatIDpre.push(chatterId);
+    chatIDpre.push(chateeID);
+    chatIDpre.sort();
+    const distinctChatId= chatIDpre.join('_');
+
     props.navigation.navigate('ChatRoom', {
       currUserId: userId,
-      friendId: friendId
+      friendId: friendId,
+      chatId : distinctChatId
     });
   };
 

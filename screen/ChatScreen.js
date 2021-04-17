@@ -6,7 +6,7 @@ import {
   SystemMessage
 } from 'react-native-gifted-chat';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-//import { IconButton } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 //import { AuthContext } from '../navigation/AuthProvider';
 import { firebase } from '../constants/Config';
 //import useStatsBar from '../utils/useStatusBar';
@@ -14,33 +14,35 @@ import { firebase } from '../constants/Config';
 
 var myDB = firebase.firestore();
 
-export default function ChatScreen({ route }) {
+const  ChatScreen = (props) => {
   //useStatsBar('light-content');
 
   const [messages, setMessages] = useState([]);
-  const { thread } = route.params;
-  const { user } = useContext(AuthContext);
-  const currentUser = user.toJSON();
+  //const { thread } = props.route.params.chatId;
+  const chatId = props.route.params.chatId;
+  //const { user } = useContext(AuthContext);
+  const currentUser = props.route.params.currUserId;
+  //const currentUser = user.toJSON();
 
   async function handleSend(messages) {
     const text = messages[0].text;
 
-    firestore()
-      .collection('THREADS')
-      .doc(thread._id)
-      .collection('MESSAGES')
+    myDB
+      .collection('Chats')
+      .doc(chatId)
+      .collection('Messages')
       .add({
         text,
         createdAt: new Date().getTime(),
         user: {
-          _id: currentUser.uid,
-          email: currentUser.email
+          _id: currentUser,
+          //email: currentUser.email
         }
       });
 
-    await firestore()
-      .collection('THREADS')
-      .doc(thread._id)
+    await myDB
+      .collection('Chats')
+      .doc(chatId)
       .set(
         {
           latestMessage: {
@@ -53,10 +55,10 @@ export default function ChatScreen({ route }) {
   }
 
   useEffect(() => {
-    const messagesListener = firestore()
-      .collection('THREADS')
-      .doc(thread._id)
-      .collection('MESSAGES')
+    const messagesListener = myDB
+      .collection('Chats')
+      .doc(chatId)
+      .collection('Messages')
       .orderBy('createdAt', 'desc')
       .onSnapshot(querySnapshot => {
         const messages = querySnapshot.docs.map(doc => {
@@ -69,12 +71,12 @@ export default function ChatScreen({ route }) {
             ...firebaseData
           };
 
-          if (!firebaseData.system) {
-            data.user = {
-              ...firebaseData.user,
-              name: firebaseData.user.email
-            };
-          }
+          // if (!firebaseData.system) {
+          //   data.user = {
+          //     ...firebaseData.user,
+          //     name: firebaseData.user.email
+          //   };
+          // }
 
           return data;
         });
@@ -144,7 +146,8 @@ export default function ChatScreen({ route }) {
     <GiftedChat
       messages={messages}
       onSend={handleSend}
-      user={{ _id: currentUser.uid }}
+      // user={{ _id: currentUser.uid }}
+      user = {{_id: currentUser}}
       placeholder='Type your message here...'
       alwaysShowSend
       showUserAvatar
@@ -183,3 +186,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 });
+
+export default ChatScreen;
