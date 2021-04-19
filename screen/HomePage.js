@@ -7,31 +7,53 @@ import Colors from '../constants/Colors';
 import ListItemName from '../components/UI/ListItemName';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import { firebase } from '../constants/Config';
+import { Searchbar } from 'react-native-paper';
 
 
-//const myDB = firebase.firestore();
+const myDB = firebase.firestore();
 
 
 
 const HomePageScreen = props => {
 
-  const [searchText , setSearchText] = useState('');
+  //realting to search bar and queires
+  const searchText = useState('');
   const [searchBarItems, setSearchBarItems] = useState([]);
 
   const friendsList = useSelector(state => state.friend.friendsList);
   const user = useSelector(state => state.auth.userId);
+  const [userName, setUserName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   
+  //will be dispatching action in the future
+  const dispatch = useDispatch();
 
-  const [myDB, setMyDB] = useState();
+  //const [myDB, setMyDB] = useState();
 
+  //establish connection with the database and get the user name
+  // useEffect( () => {
+  //   setMyDB(firebase.firestore());
+  // }, [setMyDB]);
 
   useEffect( () => {
-    setMyDB(firebase.firestore());
-  }, [setMyDB, myDB]);
+    myDB
+    .collection('users')
+    .doc(user)
+    .get()
+    .then(function(doc) {
+      if (doc.exists) {
+        console.log("Document data:", doc.data()['fullname']); //store
+        setUserName(doc.data()['fullname']);
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    });
+  }, [setUserName]);
   
-  const dispatch = useDispatch();
 
 
   const searchHandler = text => {
@@ -56,7 +78,6 @@ const HomePageScreen = props => {
 
 
   const selectPersonHandler = (userId, friendId) => {
-
     //generating distinct chat id for the chat room between these friends
     const chatterId = userId;
     const chateeID = friendId;
@@ -74,14 +95,6 @@ const HomePageScreen = props => {
   };
 
 
-  // //to run when the user inputs a name to the search bar
-  // const onSearchBarChangeTextHandler = useCallback(
-  //   (text) => async() => {
-  //     //go to db and fetch emails and ids
-  //     console.log(text);
-  //   }
-  // , []);
-
   const onSearchBarChangeTextHandler = async(text) => {
     //search the user
     await myDB
@@ -89,12 +102,16 @@ const HomePageScreen = props => {
       .where("email","==", text)
       .get()
       .then(querySnapshot => {
+        const myArr = [];
         querySnapshot.forEach(doc => {
-          console.log(doc.id, " => ", doc.data());
+          //console.log(doc.id, " => ", doc.data());
           const myObj = {};
           myObj['name'] = doc.data()['fullname'];
           myObj['id'] = doc.data()['id'];
-          searchBarItems.push(myObj);
+          //searchBarItems.push(myObj);
+          myArr.push(myObj);
+          setSearchBarItems(myArr);
+
         });
 
         // dispatch({ type: SET_FRIENDS, friendsList: myArr });
@@ -102,15 +119,25 @@ const HomePageScreen = props => {
       }).catch(error => {
         console.log("Error getting document: ", error);
       });
-
-    console.log(text);
   }
 
-  const onSearchBarItemSelect = useCallback(
-    (item) => async() => {
-      //add the selected user as frind
-    }
-  , [searchBarItems]);
+
+  //add the clicked person to friend
+  const onSearchBarItemSelect =  async (userId, userName, friendId, friendName) => {
+    await myDB.collection('users').doc(userId).collection('Friends').doc(friendId).set({
+      Name: friendName,
+      id: friendId
+    });
+      
+      
+    await myDB.collection('users').doc(friendId).collection('Friends').doc(userId).set({
+      Name: userName,
+      id: userId
+    }); 
+    
+    await dispatch(friendsActions.fetchFriends(user));
+    setSearchBarItems([]);
+  };
 
 
   //runs on every rerender and calls func to fetch the friends
@@ -130,7 +157,7 @@ const HomePageScreen = props => {
   }
   return (
     <View style={styles.screen}>
-      <SearchableDropdown
+      {/* <SearchableDropdown
         onTextChange={(text) => {onSearchBarChangeTextHandler(text)}}
         onItemSelect={(item) => {onSearchBarItemSelect(item)}}
         //onItemSelect={(item) => alert(JSON.stringify(item))}
@@ -146,25 +173,40 @@ const HomePageScreen = props => {
         //reset textInput Value with true and false state
         underlineColorAndroid="transparent"
         //To remove the underline from the android input
+      />  */}
+
+
+      <Searchbar
+        placeholder="Input email"
+        onChangeText = {(searchText) => {onSearchBarChangeTextHandler(searchText)}}
+        value={searchText}
+      />
+
+      <Text>{"Search Results"}</Text>
+      <FlatList
+        data={searchBarItems}
+        // renderItem={renderItem}
+        keyExtractor={item => item.name}
+        renderItem = { itemData => (
+          <ListItemName style = {styles.item} onSelect = {() => {onSearchBarItemSelect(user, userName, itemData.item.id, itemData.item.name)} }>
+            <Text style = {styles.title}>{itemData.item.name}</Text>
+          </ListItemName>
+        )}
       /> 
 
 
-
-      <ScrollView>
-        {
-
-        <FlatList
-          data={friendsList}
-          // renderItem={renderItem}
-          keyExtractor={item => item.id}sc
-          renderItem = { itemData => (
-            <ListItemName style = {styles.item} onSelect = {() => {selectPersonHandler(user, itemData.item.id)}}>
-              <Text style = {styles.title}>{itemData.item.name}</Text>
-            </ListItemName>
-          )}
-        /> 
-        }
-      </ScrollView>
+      <Text>{"Friends List"}</Text>
+      <FlatList
+        data={friendsList}
+        // renderItem={renderItem}
+        keyExtractor={item => item.id}
+        renderItem = { itemData => (
+          <ListItemName style = {styles.item} onSelect = {() => {selectPersonHandler(user, itemData.item.id)}}>
+            <Text style = {styles.title}>{itemData.item.name}</Text>
+          </ListItemName>
+        )}
+      /> 
+        
     </View>
   );
 };

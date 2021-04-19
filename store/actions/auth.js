@@ -3,10 +3,10 @@ export const LOGOUT = 'LOGOUT';
 
 import { firebase } from '../../constants/Config';
 
-export const authenticate = (userId, token, expiryTime) => {
+export const authenticate = (userId, token, fullName) => {
     return dispatch => {
       //dispatch(setLogoutTimer(expiryTime));
-      dispatch({ type: AUTHENTICATE, userId: userId, token: token });
+      dispatch({ type: AUTHENTICATE, userId: userId, token: token});
     };
 };
   
