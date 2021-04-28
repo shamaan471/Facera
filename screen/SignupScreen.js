@@ -200,7 +200,11 @@ const SignupScreen = props => {
 
 
 export const screenOptions = {
-    headerTitle: 'Signup'
+    headerTitle: 'Sign Up',
+    headerTintColor: '#013220',
+      headerTitleStyle: {
+            fontWeight: 'bold',
+          },
 };
   
 const styles = StyleSheet.create({

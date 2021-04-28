@@ -6,7 +6,8 @@ import {
     StyleSheet,
     Button,
     ActivityIndicator,
-    Alert
+    Alert,
+    Image
   } from 'react-native';
 
 import Colors from '../constants/Colors';
@@ -113,8 +114,9 @@ const LoginScreen = props => {
           keyboardVerticalOffset={50}
           style={styles.screen}
         >
-
+            <Image style={styles.imgr} source={require('./Facera_logo.png')} />
             <Card style={styles.authContainer}>
+            
                 <ScrollView>
                     <Input
                         id="email"
@@ -127,7 +129,7 @@ const LoginScreen = props => {
                         onInputChange={inputChangeHandler}
                         initialValue=""
                     />
-                    <Input
+                    <Input 
                         id="password"
                         label="Password"
                         keyboardType="default"
@@ -194,7 +196,8 @@ const styles = StyleSheet.create({
     screen: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      backgroundColor: 'white'
     },
     gradient: {
       flex: 1,
@@ -208,7 +211,13 @@ const styles = StyleSheet.create({
       padding: 20
     },
     buttonContainer: {
-      marginTop: 15
+      marginTop: 15,
+      margin: '15px'
+    },
+    imgr: {
+      bottom: 45,
+      margin: 30,
+      right: 10,
     }
 });
 

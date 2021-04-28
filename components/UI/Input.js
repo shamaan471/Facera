@@ -95,7 +95,10 @@ const styles = StyleSheet.create({
       width: '100%'
     },
     label: {
-      marginVertical: 8
+      marginVertical: 8,
+      color: '#085A2E',
+      fontWeight: 'bold',
+      fontSize: 15
     },
     input: {
       paddingHorizontal: 2,

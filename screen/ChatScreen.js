@@ -118,7 +118,7 @@ const  ChatScreen = (props) => {
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
-          <IconButton icon='send-circle' size={32} color='#6646ee' />
+          <IconButton icon='send-circle' size={32} color='#085A2E' />
         </View>
       </Send>
     );
@@ -186,5 +186,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 });
+
+export const screenOptions = {
+  headerTitle: 'Chat',
+  headerTintColor: '#013220',
+  headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+};
 
 export default ChatScreen;

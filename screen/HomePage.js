@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import { View, ScrollView, StyleSheet, ActivityIndicator , Text, FlatList, TouchableOpacity} from 'react-native';
+import { View, ScrollView, StyleSheet, ActivityIndicator , Text, FlatList, TouchableOpacity,Button} from 'react-native';
 import { SearchBar, ListItem } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
 import * as friendsActions from '../store/actions/friends';
@@ -8,6 +8,7 @@ import ListItemName from '../components/UI/ListItemName';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import { firebase } from '../constants/Config';
 import { Searchbar } from 'react-native-paper';
+import Card from '../components/UI/Card';
 
 
 const myDB = firebase.firestore();
@@ -92,7 +93,9 @@ const HomePageScreen = props => {
       friendId: friendId,
       chatId : distinctChatId
     });
-  };
+     };
+
+ 
 
 
   const onSearchBarChangeTextHandler = async(text) => {
@@ -139,6 +142,10 @@ const HomePageScreen = props => {
     setSearchBarItems([]);
   };
 
+  const profilePageHandler = () => {
+    props.navigation.navigate('Profile');
+  }
+
 
   //runs on every rerender and calls func to fetch the friends
   useEffect(() => {
@@ -175,14 +182,20 @@ const HomePageScreen = props => {
         //To remove the underline from the android input
       />  */}
 
-
+      <Button style={{color: "65BE69", margin: 10}}
+        onPress={() => profilePageHandler()}
+        title="Profile"
+      />
       <Searchbar
-        placeholder="Input email"
+        placeholder="Enter an email adress..."
         onChangeText = {(searchText) => {onSearchBarChangeTextHandler(searchText)}}
         value={searchText}
       />
-
-      <Text>{"Search Results"}</Text>
+ 
+      <Text style={styles.textBar}
+      
+      >{"Search Results"}</Text>
+      <Card style={styles.resultContainer}>
       <FlatList
         data={searchBarItems}
         // renderItem={renderItem}
@@ -193,9 +206,9 @@ const HomePageScreen = props => {
           </ListItemName>
         )}
       /> 
+        </Card>
 
-
-      <Text>{"Friends List"}</Text>
+      <Text style={styles.textBar}>{"Friends List"}</Text>
       <FlatList
         data={friendsList}
         // renderItem={renderItem}
@@ -211,7 +224,6 @@ const HomePageScreen = props => {
   );
 };
 
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -220,13 +232,13 @@ const styles = StyleSheet.create({
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#C9E0AF',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
   },
   title: {
-    fontSize: 32,
+    fontSize: 20,
   },
   textContainer: {
     padding: 5
@@ -253,11 +265,27 @@ const styles = StyleSheet.create({
 
   searchBarItemContainer: {
     maxHeight: '60%',
-  }
+  },
+
+  textBar: {
+    fontWeight: 'bold',
+    color: '#085A2E',
+    fontSize: 20,
+    margin: 10
+  },
+  resultContainer: {
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
 });
 
 export const screenOptions = {
-  headerTitle: 'Home'
+  headerTitle: 'Home',
+  headerTintColor: '#013220',
+  headerTitleStyle: {
+        fontWeight: 'bold',
+      },
 };
 
 

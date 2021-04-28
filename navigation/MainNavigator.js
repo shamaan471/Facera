@@ -6,6 +6,7 @@ import LoginScreen, {screenOptions as loginScreenOptions} from '../screen/LoginS
 import SignupScreen, {screenOptions as signupScreenOptions} from '../screen/SignupScreen';
 import HomePageScreen, {screenOptions as homeScreenOptions} from '../screen/HomePage';
 import ChatScreen, {screenOptions as chatScreenOptions} from '../screen/ChatScreen';
+
 import {
   createDrawerNavigator,
   DrawerItemList
@@ -15,6 +16,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 import * as authActions from '../store/actions/auth'
+import ProfilePageScreen, {screenOptions as profilePageScreenOptions} from '../screen/ProfilePageScreen.js';
+import EditProfilePageScreen, {screenOptions as editProfilePageScreenOptions} from '../screen/EditProfilePageScreen.js';
 
 
 
@@ -67,7 +70,19 @@ export const MainPageNavigator = () => {
         component = {ChatScreen}
         options = {chatScreenOptions}
       />
+       
+       
+      <MainNavigator.Screen
+        name = "Profile"
+        component = {ProfilePageScreen}
+        options = {profilePageScreenOptions}
+      />
 
+        <MainNavigator.Screen
+        name = "EditProfile"
+        component = {EditProfilePageScreen}
+        options = {editProfilePageScreenOptions}
+      />
 
     </MainNavigator.Navigator>
   );
@@ -107,20 +122,35 @@ export const MainAppNavigator = () => {
         activeTintColor: Colors.primary
       }}
     >
-      <AppDrawerNavigator.Screen
+      <AppDrawerNavigator.Screen 
         name = "HomeScreen"
         component = {MainPageNavigator}
         options={{
           drawerIcon: props => (
             <Ionicons
-              name={'md-cart'}
-              size={23}
+              name={'home'}
+              size={30}
               color={props.color}
             />
           )
         }}
       />
+      <AppDrawerNavigator.Screen
+        name = "Profile"
+        component = {MainPageNavigator}
+        options={{
+          drawerIcon: props => (
+            <Ionicons
+              name={'person-circle'}
+              size={30}
+              color={props.color}
+            />
+          )
+        }}
+      />
+      
     </AppDrawerNavigator.Navigator>
+    
 
   );
 
