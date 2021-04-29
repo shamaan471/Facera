@@ -3,7 +3,8 @@ import {
   GiftedChat,
   Bubble,
   Send,
-  SystemMessage
+  SystemMessage,
+  Actions
 } from 'react-native-gifted-chat';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { IconButton } from 'react-native-paper';
@@ -142,6 +143,21 @@ const  ChatScreen = (props) => {
     );
   }
 
+  function renderReocrdButton(props){
+    return(
+        <Actions {...props}>
+          <View style={styles.sendingContainer}>
+            <IconButton icon='camera' size={32} color='#085A2E' />
+          </View>
+        </Actions>
+    );
+  }
+
+  function handleCamPress(){
+    console.log("me pressed");
+    props.navigation.navigate('DetectFace');
+  }
+
   return (
     <GiftedChat
       messages={messages}
@@ -157,6 +173,8 @@ const  ChatScreen = (props) => {
       renderSend={renderSend}
       scrollToBottomComponent={scrollToBottomComponent}
       renderSystemMessage={renderSystemMessage}
+      renderActions ={renderReocrdButton}
+      onPressActionButton = {handleCamPress}
     />
   );
 }
