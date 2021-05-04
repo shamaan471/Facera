@@ -7,7 +7,7 @@ import * as MediaLibrary from 'expo-media-library';
 import * as Permissions from 'expo-permissions';
 
 
-const landmarkSize = 2;
+const landmarkSize = 4;
 
 //cam flash
 const flashModeOrder = {
