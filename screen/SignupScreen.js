@@ -43,6 +43,7 @@ const formReducer = (state, action) => {
 const SignupScreen = props => {
 
     const [error, setError] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -90,13 +91,14 @@ const SignupScreen = props => {
             formState.inputValues.password
         );
         setError(null);
-        //setIsLoading(true);
+        setIsLoading(true);
         try {
             await dispatch(action);
             //props.navigation.navigate('Login');
+            props.navigation.goBack();
           } catch (err) {
             setError(err.message);
-            //setIsLoading(false);
+            setIsLoading(false);
         }
     }
 
@@ -163,11 +165,17 @@ const SignupScreen = props => {
                     </View>
 
                     <View style={styles.buttonContainter}>
-                        <Button
+                        {
+                          isLoading? 
+                          (<ActivityIndicator size="small" color={Colors.primary} />)
+                          :
+                          ( <Button
                           title = 'Go Back'
                           color={Colors.primary}
                           onPress={() => props.navigation.goBack()}
-                        />
+                        />)
+                        }
+                       
                     </View>
 
                     {/* <View style={styles.buttonContainer}>
@@ -221,10 +229,10 @@ const styles = StyleSheet.create({
     authContainer: {
       width: '80%',
       maxWidth: 400,
-      maxHeight: 400,
+      maxHeight: 600,
       padding: 20
     },
-    buttonContainer: {
+    buttonContainter: {
       marginTop: 10
     }
 });
