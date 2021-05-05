@@ -15,10 +15,6 @@ const AppNavigator = props => {
         <NavigationContainer>
             {isAuth && <MainAppNavigator/>}
             {!isAuth &&<AuthNavigator/>}
-            {/*
-            MainPageNavigator
-            ChatNavigator
-            ...*/ }
         </NavigationContainer>
     );
 };

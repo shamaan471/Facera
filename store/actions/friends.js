@@ -5,46 +5,7 @@ export const SET_FRIENDS = 'SET_FRIENDS';
 
 var myDB = firebase.firestore();
 
-// export const fetchProducts = (userId) => {
-//     return async (dispatch, getState) => {
-//       // any async code you want!
-//       const userId = getState().auth.userId;
-//       try {
-//         const response = await fetch(
-//           'https://ng-prj-test.firebaseio.com/products.json'
-//         );
-  
-//         if (!response.ok) {
-//           throw new Error('Something went wrong!');
-//         }
-  
-//         const resData = await response.json();
-//         const loadedProducts = [];
-  
-//         for (const key in resData) {
-//           loadedProducts.push(
-//             new Product(
-//               key,
-//               resData[key].ownerId,
-//               resData[key].title,
-//               resData[key].imageUrl,
-//               resData[key].description,
-//               resData[key].price
-//             )
-//           );
-//         }
-  
-//         dispatch({
-//           type: SET_PRODUCTS,
-//           products: loadedProducts,
-//           userProducts: loadedProducts.filter(prod => prod.ownerId === userId)
-//         });
-//       } catch (err) {
-//         // send to custom analytics server
-//         throw err;
-//       }
-//     };
-// };
+
 
 export const fetchFriends = (userId) => {
     return dispatch => {

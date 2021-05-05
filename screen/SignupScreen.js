@@ -178,26 +178,6 @@ const SignupScreen = props => {
                        
                     </View>
 
-                    {/* <View style={styles.buttonContainer}>
-                        {isLoading ? (
-                        <ActivityIndicator size="small" color={Colors.primary} />
-                        ) : (
-                        <Button
-                            title={isSignup ? 'Sign Up' : 'Login'}
-                            color={Colors.primary}
-                            onPress={authHandler}
-                        />
-                        )}
-                    </View> */}
-                    {/* <View style={styles.buttonContainer}>
-                        <Button
-                        title={`Switch to ${isSignup ? 'Login' : 'Sign Up'}`}
-                        color={Colors.accent}
-                        onPress={() => {
-                            setIsSignup(prevState => !prevState);
-                        }}
-                        />
-                    </View> */}
                 </ScrollView>
             </Card>
           

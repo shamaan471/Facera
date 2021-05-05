@@ -2,11 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { View, SafeAreaView, StyleSheet } from "react-native";
 import { firebase } from "../constants/Config";
-import { SearchBar } from "react-native-elements";
-
-import { Avatar, Text, Button, TextInput } from "react-native";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
-
+import { Text, Button, TextInput } from "react-native";
+import {  TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Ionicons } from '@expo/vector-icons';
 
