@@ -9,6 +9,8 @@ import SearchableDropdown from 'react-native-searchable-dropdown';
 import { firebase } from '../constants/Config';
 import { Searchbar } from 'react-native-paper';
 import Card from '../components/UI/Card';
+import { AntDesign } from '@expo/vector-icons';
+import { Button as ElButton} from 'react-native-elements';
 
 
 const myDB = firebase.firestore();
@@ -280,12 +282,29 @@ const styles = StyleSheet.create({
   },
 });
 
-export const screenOptions = {
-  headerTitle: 'Home',
-  headerTintColor: '#013220',
-  headerTitleStyle: {
-        fontWeight: 'bold',
-      },
+// export const screenOptions = {
+//   headerTitle: 'Home',
+//   headerTintColor: '#013220',
+//   headerTitleStyle: {
+//         fontWeight: 'bold',
+//   },
+// };
+
+export const screenOptions = navData => {
+  return {
+    headerTitle: 'Home',
+    headerTintColor: '#013220',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+    headerRight: () => (
+        <ElButton
+            onPress = {() => navData.navigation.navigate('AvatarScreen')}
+            type = "clear"
+            icon={<AntDesign  name={'smileo'} size={30} color={'#075e1e'} />}
+        />
+    )
+  }
 };
 
 

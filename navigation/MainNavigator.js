@@ -7,6 +7,7 @@ import SignupScreen, { screenOptions as signupScreenOptions } from '../screen/Si
 import HomePageScreen, { screenOptions as homeScreenOptions } from '../screen/HomePage';
 import ChatScreen, { screenOptions as chatScreenOptions } from '../screen/ChatScreen';
 import RecordFaceCamScreen, { screenOptions as recordFaceScreen } from '../screen/RecordFaceCamScreen';
+import AvatarScreen, {screenOptions as avatarScreenOptions} from '../screen/AvatarScreen';
 
 
 import {
@@ -89,6 +90,12 @@ export const MainPageNavigator = () => {
         name="DetectFace"
         component={RecordFaceCamScreen}
         options={recordFaceScreen}
+      />
+
+      <MainNavigator.Screen
+        name="AvatarScreen"
+        component={AvatarScreen}
+        options={avatarScreenOptions}
       />
 
     </MainNavigator.Navigator>
